@@ -1,6 +1,6 @@
 let currentQuestion = 0;
 let score = 0;
-let timeLeft = 30;
+let timeLeft = 60;
 let timer;
 
 const tickSound = new Audio('sounds/tick.mp3');
@@ -106,7 +106,7 @@ function preloadSounds() {
 function startGame() {
     currentQuestion = 0;
     score = 0;
-    timeLeft = 30;
+    timeLeft = 60;
     preloadSounds();
     document.getElementById('game-start').classList.add('hidden');
     document.getElementById('game-play').classList.remove('hidden');
@@ -144,9 +144,24 @@ function updateTimer() {
 
 function endGame() {
     clearInterval(timer);
+    tickSound.pause();
+    tickSound.currentTime = 0;
     document.getElementById('game-play').classList.add('hidden');
     document.getElementById('game-end').classList.remove('hidden');
     document.getElementById('score').textContent = score;
+    
+    let encouragement = "";
+    if (score === 10) {
+        encouragement = "Perfect score! You're a math genius! 🌟";
+    } else if (score >= 8) {
+        encouragement = "Amazing job! You're super smart! 🎉";
+    } else if (score >= 6) {
+        encouragement = "Well done! Keep practicing! 👍";
+    } else {
+        encouragement = "Good try! Practice makes perfect! 💪";
+    }
+    
+    document.getElementById('encouragement').textContent = encouragement;
     
     if (score >= 8) {
         confetti({

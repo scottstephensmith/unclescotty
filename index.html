@@ -6,6 +6,42 @@
     <title>Huck & Gus Math Game</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        #start-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        #start-button:hover {
+            background-color: #45a049;
+        }
+        #game-end {
+            text-align: center;
+            padding: 20px;
+        }
+        #game-end h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        #thumbs-up-gif {
+            width: 150px;
+            margin: 20px 0;
+        }
+        #encouragement {
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -19,12 +55,14 @@
             <div id="progress">Question <span id="current-question">1</span>/10</div>
             <div id="problem"></div>
             <div id="choices"></div>
-            <div id="timer">Time: <span id="time">30</span>s</div>
+            <div id="timer">Time: <span id="time">60</span>s</div>
         </div>
 
         <div id="game-end" class="game-section hidden">
             <h2>Game Over!</h2>
+            <img id="thumbs-up-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDd6b2V4dmk4Y2ptNXJ1NWF1OWF1dWV1Y2lxbWF6bHd0ZHF3YmtnbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/THrwXZKzmxGXMEMZNb/giphy.gif" alt="Thumbs Up">
             <p>You got <span id="score">0</span> out of 10 correct!</p>
+            <p id="encouragement"></p>
             <button id="play-again">Play Again</button>
         </div>
     </div>
