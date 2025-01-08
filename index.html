@@ -3,69 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huck & Gus Math Game</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <title>Uncle Scotty and Aunt Michelle's Great Game Website</title>
     <style>
-        #start-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        #start-button:hover {
-            background-color: #45a049;
-        }
-        #game-end {
-            text-align: center;
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
-        #game-end h2 {
-            font-size: 2.5em;
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            color: #1a2a6c;
+            line-height: 1.2;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .game-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card h2 {
+            color: #1a2a6c;
             margin-bottom: 10px;
         }
-        #thumbs-up-gif {
-            width: 150px;
-            margin: 20px 0;
+
+        .game-card p {
+            color: #666;
+            font-size: 0.9em;
         }
-        #encouragement {
-            font-size: 1.2em;
-            margin: 15px 0;
-            color: #2c3e50;
+
+        .coming-soon {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>The Huck & Gus Math Game</h1>
+        <h1>Uncle Scotty's &amp; Aunt Michelle's Great Game Website</h1>
+        <h4>Welcome to our game website! Here you can find a variety of games to play with your Mom &amp; Dad.</h4>
         
-        <div id="game-start" class="game-section">
-            <button id="start-button">START</button>
-        </div>
-
-        <div id="game-play" class="game-section hidden">
-            <div id="progress">Question <span id="current-question">1</span>/10</div>
-            <div id="problem"></div>
-            <div id="choices"></div>
-            <div id="timer">Time: <span id="time">60</span>s</div>
-        </div>
-
-        <div id="game-end" class="game-section hidden">
-            <h2>Game Over!</h2>
-            <img id="thumbs-up-gif" src="" alt="Celebration">
-            <p>You got <span id="score">0</span> out of 10 correct!</p>
-            <p id="encouragement"></p>
-            <button id="play-again">Play Again</button>
+        
+        <div class="games-grid">
+            <a href="math-game.html" class="game-card">
+                <h2>Huck & Gus Math Game</h2>
+                <p>Practice addition and subtraction!</p>
+            </a>
+            
+            <div class="game-card coming-soon">
+                <h2>Coming Soon!</h2>
+                <p>More exciting games on the way...</p>
+            </div>
+            
+            <div class="game-card coming-soon">
+                <h2>Coming Soon!</h2>
+                <p>More exciting games on the way...</p>
+            </div>
         </div>
     </div>
-    <script src="game.js"></script>
 </body>
 </html> 

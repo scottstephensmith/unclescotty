@@ -2,41 +2,93 @@ let currentQuestion = 0;
 let score = 0;
 let timeLeft = 60;
 let timer;
+let isAdultMode = false;
 
 const tickSound = new Audio('sounds/tick.mp3');
 const correctSound = new Audio('sounds/correct.mp3');
 const wrongSound = new Audio('sounds/wrong.mp3');
 
-function generateProblem() {
-    const num1 = Math.floor(Math.random() * 10);
-    const num2 = Math.floor(Math.random() * 10);
-    const operation = Math.random() < 0.5 ? '+' : '-';
-    
-    let answer;
-    let problem;
-    
-    if (operation === '+') {
-        answer = num1 + num2;
-        problem = `${num1} + ${num2}`;
+function updateModeBanner() {
+    const banner = document.getElementById('mode-banner');
+    if (isAdultMode) {
+        banner.textContent = 'Adult Mode';
+        banner.className = 'adult-mode-banner';
     } else {
-        // For subtraction, make sure the result is positive
-        if (num1 >= num2) {
-            answer = num1 - num2;
-            problem = `${num1} - ${num2}`;
-        } else {
-            answer = num2 - num1;
-            problem = `${num2} - ${num1}`;
-        }
+        banner.textContent = 'Kid Mode';
+        banner.className = 'kid-mode-banner';
     }
-    
-    return { problem, answer };
+}
+
+function showGameInterface() {
+    document.body.classList.add('in-game');
+    updateModeBanner();
+}
+
+function hideGameInterface() {
+    document.body.classList.remove('in-game');
+}
+
+function generateProblem() {
+    if (!isAdultMode) {
+        const num1 = Math.floor(Math.random() * 10);
+        const num2 = Math.floor(Math.random() * 10);
+        const operation = Math.random() < 0.5 ? '+' : '-';
+        
+        let answer;
+        let problem;
+        
+        if (operation === '+') {
+            answer = num1 + num2;
+            problem = `${num1} + ${num2}`;
+        } else {
+            // For subtraction, make sure the result is positive
+            if (num1 >= num2) {
+                answer = num1 - num2;
+                problem = `${num1} - ${num2}`;
+            } else {
+                answer = num2 - num1;
+                problem = `${num2} - ${num1}`;
+            }
+        }
+        
+        return { problem, answer };
+    } else {
+        // Adult mode: more complex problems with three numbers and two operations
+        const num1 = Math.floor(Math.random() * 20);
+        const num2 = Math.floor(Math.random() * 15);
+        const num3 = Math.floor(Math.random() * 10);
+        const operations = ['+', '-'];
+        const op1 = operations[Math.floor(Math.random() * 2)];
+        const op2 = operations[Math.floor(Math.random() * 2)];
+        
+        const problem = `${num1} ${op1} ${num2} ${op2} ${num3}`;
+        let answer;
+        
+        // Calculate the answer following order of operations
+        if (op1 === '+') {
+            if (op2 === '+') {
+                answer = num1 + num2 + num3;
+            } else {
+                answer = num1 + num2 - num3;
+            }
+        } else {
+            if (op2 === '+') {
+                answer = num1 - num2 + num3;
+            } else {
+                answer = num1 - num2 - num3;
+            }
+        }
+        
+        return { problem, answer };
+    }
 }
 
 function generateChoices(answer) {
     let choices = [answer];
+    const range = isAdultMode ? 40 : 20;
     
     while (choices.length < 4) {
-        const choice = Math.max(0, Math.floor(Math.random() * 20));
+        const choice = Math.max(0, answer + Math.floor(Math.random() * range) - Math.floor(range/2));
         if (!choices.includes(choice)) {
             choices.push(choice);
         }
@@ -106,7 +158,10 @@ function preloadSounds() {
 function startGame() {
     currentQuestion = 0;
     score = 0;
-    timeLeft = 60;
+    timeLeft = isAdultMode ? 15 : 60;
+    document.getElementById('time').textContent = timeLeft;
+    showGameInterface();
+    
     preloadSounds();
     document.getElementById('game-start').classList.add('hidden');
     document.getElementById('game-play').classList.remove('hidden');
@@ -155,6 +210,7 @@ function endGame() {
     document.getElementById('game-play').classList.add('hidden');
     document.getElementById('game-end').classList.remove('hidden');
     document.getElementById('score').textContent = score;
+    hideGameInterface();
     
     // Update the celebration image
     const celebrationImg = document.getElementById('thumbs-up-gif');
@@ -169,7 +225,7 @@ function endGame() {
     
     let encouragement = "";
     if (score === 10) {
-        encouragement = "Perfect score! You're a math genius! 🌟";
+        encouragement = isAdultMode ? "Perfect score in adult mode! You're a math wizard! 🌟" : "Perfect score! You're a math genius! 🌟";
     } else if (score >= 8) {
         encouragement = "Amazing job! You're super smart! 🎉";
     } else if (score >= 6) {
@@ -197,5 +253,22 @@ function fireConfetti() {
     });
 }
 
-document.getElementById('start-button').onclick = startGame;
-document.getElementById('play-again').onclick = startGame; 
+document.getElementById('start-button').onclick = () => {
+    isAdultMode = false;
+    startGame();
+};
+
+document.getElementById('adult-mode-button').onclick = () => {
+    isAdultMode = true;
+    startGame();
+};
+
+document.getElementById('play-again').onclick = () => {
+    isAdultMode = false;
+    startGame();
+};
+
+document.getElementById('play-again-adult').onclick = () => {
+    isAdultMode = true;
+    startGame();
+}; 

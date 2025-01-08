@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huck & Gus Math Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+        body.in-game {
+            padding-top: 40px;
+        }
+        #mode-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            z-index: 1000;
+            transition: background-color 0.3s;
+            display: none;
+        }
+        body.in-game #mode-banner {
+            display: block;
+        }
+        .kid-mode-banner {
+            background-color: #4CAF50;
+        }
+        .adult-mode-banner {
+            background-color: #333;
+        }
+        #start-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        #start-button:hover {
+            background-color: #45a049;
+        }
+        #adult-mode-button {
+            background-color: #666;
+            color: #999;
+            border: 1px solid #999;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 12px;
+            margin: 15px auto 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+            width: fit-content;
+        }
+        #adult-mode-button:hover {
+            background-color: #444;
+            color: white;
+        }
+        #game-end {
+            text-align: center;
+            padding: 20px;
+        }
+        #game-end h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        #thumbs-up-gif {
+            width: 150px;
+            margin: 20px 0;
+        }
+        #encouragement {
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+        .container {
+            position: relative;
+        }
+        .play-again-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        #play-again-adult {
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mode-banner" class="kid-mode-banner">Kid Mode</div>
+    <div class="container">
+        <h1>The Huck & Gus Math Game</h1>
+        
+        <div id="game-start" class="game-section">
+            <button id="start-button">START</button>
+            <button id="adult-mode-button">Adult Mode</button>
+        </div>
+
+        <div id="game-play" class="game-section hidden">
+            <div id="progress">Question <span id="current-question">1</span>/10</div>
+            <div id="problem"></div>
+            <div id="choices"></div>
+            <div id="timer">Time: <span id="time">60</span>s</div>
+        </div>
+
+        <div id="game-end" class="game-section hidden">
+            <h2>Game Over!</h2>
+            <img id="thumbs-up-gif" src="" alt="Celebration">
+            <p>You got <span id="score">0</span> out of 10 correct!</p>
+            <p id="encouragement"></p>
+            <div class="play-again-buttons">
+                <button id="play-again">Play Again (Kid Mode)</button>
+                <button id="play-again-adult" class="adult-mode-button">Play Again (Adult Mode)</button>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html> 
