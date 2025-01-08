@@ -142,6 +142,12 @@ function updateTimer() {
     document.getElementById('time').textContent = timeLeft;
 }
 
+function getRandomCelebrationImage() {
+    const imageNumber = Math.floor(Math.random() * 5) + 1;
+    const extension = imageNumber <= 2 ? 'gif' : 'png';
+    return `/images/celebration${imageNumber}.${extension}`;
+}
+
 function endGame() {
     clearInterval(timer);
     tickSound.pause();
@@ -149,6 +155,9 @@ function endGame() {
     document.getElementById('game-play').classList.add('hidden');
     document.getElementById('game-end').classList.remove('hidden');
     document.getElementById('score').textContent = score;
+    
+    // Update the celebration image
+    document.getElementById('thumbs-up-gif').src = getRandomCelebrationImage();
     
     let encouragement = "";
     if (score === 10) {
