@@ -142,6 +142,133 @@
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
         }
+
+        /* Spooky level styles */
+        .game-board.spooky {
+            background-color: #1a0f1f;
+            box-shadow: 0 0 20px #ff00ff40;
+            border: 2px solid #ff00ff40;
+        }
+
+        .cell.spooky {
+            background-color: #2d1b33;
+            box-shadow: inset 0 0 5px #000000;
+        }
+
+        .block.spooky {
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .block.truck.spooky {
+            background-color: #ff3800;
+            box-shadow: 0 0 15px rgba(255, 56, 0, 0.5);
+        }
+
+        .block.vertical.spooky,
+        .block.horizontal.spooky {
+            background-color: #4a0f55;
+            box-shadow: 0 0 10px rgba(74, 15, 85, 0.5);
+        }
+
+        .exit-zone.spooky {
+            background: linear-gradient(90deg, #4a0f55, #ff00ff);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+        }
+
+        /* Spooky mode affects the whole game */
+        body.spooky-mode {
+            background: linear-gradient(to bottom, #0a0011 0%, #1a0f1f 100%);
+        }
+
+        body.spooky-mode .container {
+            background: rgba(26, 15, 31, 0.95);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
+        }
+
+        body.spooky-mode h1 {
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        /* Flash animation for level reveal */
+        .flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            animation: flash 1s forwards;
+            z-index: 1000;
+        }
+
+        @keyframes flash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Spooky level message */
+        .spooky-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+            z-index: 1001;
+            transition: opacity 1s;
+            text-align: center;
+            background: rgba(26, 15, 31, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+
+        /* Spooky win message */
+        body.spooky-mode #win-message {
+            background-color: rgba(26, 15, 31, 0.95);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+            border: 2px solid #ff00ff40;
+        }
+
+        body.spooky-mode #win-message h2 {
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        /* Spooky button styles */
+        body.spooky-mode .btn {
+            background-color: #4a0f55;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        body.spooky-mode .btn:hover {
+            background-color: #6a1f75;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+
+        /* Hide instructions in spooky mode */
+        body.spooky-mode .instructions {
+            display: none;
+        }
+
+        /* Adjust bottom buttons */
+        .bottom-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px auto;
+            max-width: 500px;  /* Increased space between buttons */
+            padding: 0 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1em;  /* Slightly smaller font */
+            min-width: 140px;  /* Consistent width */
+        }
     </style>
 </head>
 <body>
@@ -162,8 +289,10 @@
         
         <div class="game-board" id="gameBoard"></div>
 
-        <button id="reset-level" class="btn">Reset Level</button>
-        <button id="back-to-menu" class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        <div class="bottom-buttons">
+            <button id="reset-level" class="btn">Reset Level</button>
+            <button id="back-to-menu" class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        </div>
 
         <div id="win-message">
             <h2>Great Job! 🎉</h2>

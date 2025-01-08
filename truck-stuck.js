@@ -9,15 +9,17 @@ let startX, startY;
 let blockStartX, blockStartY;
 let cellSize = 0;
 
-// Level definitions with longer blocks (verified solvable)
+// Level definitions with mandatory block movement puzzles
 const levels = {
     1: {
         size: [6, 6],
         blocks: [
-            { type: 'truck', position: [2, 0], orientation: 'horizontal' },
-            { type: 'vertical', position: [0, 1], orientation: 'vertical' },
-            { type: 'vertical', position: [3, 1], orientation: 'vertical' },
-            { type: 'horizontal', position: [4, 0], orientation: 'horizontal' }
+            { type: 'truck', position: [2, 1], orientation: 'horizontal' },
+            // Block directly in truck's path
+            { type: 'vertical', position: [1, 3], orientation: 'vertical', length: 2 },
+            // Additional blocks for complexity
+            { type: 'horizontal', position: [0, 0], orientation: 'horizontal', length: 2 },
+            { type: 'vertical', position: [3, 2], orientation: 'vertical', length: 2 }
         ],
         exit: [2, 5]
     },
@@ -25,10 +27,11 @@ const levels = {
         size: [6, 6],
         blocks: [
             { type: 'truck', position: [2, 1], orientation: 'horizontal' },
-            { type: 'vertical', position: [0, 0], orientation: 'vertical' },
-            { type: 'vertical', position: [0, 3], orientation: 'vertical' },
-            { type: 'horizontal', position: [4, 2], orientation: 'horizontal' },
-            { type: 'vertical', position: [3, 4], orientation: 'vertical' }
+            // Multiple blocks blocking the path
+            { type: 'vertical', position: [1, 3], orientation: 'vertical', length: 2 },
+            { type: 'horizontal', position: [3, 3], orientation: 'horizontal', length: 2 },
+            { type: 'vertical', position: [0, 2], orientation: 'vertical', length: 2 },
+            { type: 'horizontal', position: [4, 1], orientation: 'horizontal', length: 2 }
         ],
         exit: [2, 5]
     },
@@ -36,13 +39,29 @@ const levels = {
         size: [6, 6],
         blocks: [
             { type: 'truck', position: [2, 1], orientation: 'horizontal' },
-            { type: 'vertical', position: [0, 0], orientation: 'vertical' },
-            { type: 'vertical', position: [0, 3], orientation: 'vertical' },
-            { type: 'horizontal', position: [0, 4], orientation: 'horizontal' },
-            { type: 'vertical', position: [3, 2], orientation: 'vertical' },
-            { type: 'horizontal', position: [4, 3], orientation: 'horizontal' }
+            // Complex blocking pattern
+            { type: 'vertical', position: [1, 3], orientation: 'vertical', length: 3 },
+            { type: 'horizontal', position: [4, 3], orientation: 'horizontal', length: 2 },
+            { type: 'vertical', position: [0, 2], orientation: 'vertical', length: 2 },
+            { type: 'horizontal', position: [0, 4], orientation: 'horizontal', length: 2 },
+            { type: 'vertical', position: [3, 0], orientation: 'vertical', length: 2 }
         ],
         exit: [2, 5]
+    },
+    'secret': {
+        size: [6, 6],
+        blocks: [
+            { type: 'truck', position: [2, 0], orientation: 'horizontal', isSpooky: true },
+            // Complex blocking pattern requiring many moves
+            { type: 'vertical', position: [0, 2], orientation: 'vertical', length: 3, isSpooky: true },
+            { type: 'horizontal', position: [3, 2], orientation: 'horizontal', length: 3, isSpooky: true },
+            { type: 'vertical', position: [1, 3], orientation: 'vertical', length: 2, isSpooky: true },
+            { type: 'vertical', position: [0, 4], orientation: 'vertical', length: 2, isSpooky: true },
+            { type: 'horizontal', position: [3, 0], orientation: 'horizontal', length: 2, isSpooky: true },
+            { type: 'vertical', position: [4, 4], orientation: 'vertical', length: 2, isSpooky: true }
+        ],
+        exit: [2, 5],
+        isSpooky: true
     }
 };
 
@@ -87,16 +106,25 @@ function setupLevel(levelNum) {
     blocks = [];
     gameBoard.innerHTML = '';
     
-    // Add exit zone
+    // Add exit zone with spooky variant
     const exitZone = document.createElement('div');
-    exitZone.className = 'exit-zone';
+    exitZone.className = `exit-zone${level.isSpooky ? ' spooky' : ''}`;
     gameBoard.appendChild(exitZone);
+    
+    // Update game board appearance for spooky level
+    if (level.isSpooky) {
+        gameBoard.classList.add('spooky');
+        document.body.classList.add('spooky-mode');
+    } else {
+        gameBoard.classList.remove('spooky');
+        document.body.classList.remove('spooky-mode');
+    }
     
     // Create grid cells
     for (let i = 0; i < level.size[0]; i++) {
         for (let j = 0; j < level.size[1]; j++) {
             const cell = document.createElement('div');
-            cell.className = 'cell';
+            cell.className = `cell${level.isSpooky ? ' spooky' : ''}`;
             cell.dataset.row = i;
             cell.dataset.col = j;
             gameBoard.appendChild(cell);
@@ -112,8 +140,19 @@ function setupLevel(levelNum) {
 function createBlock(blockData) {
     const block = document.createElement('div');
     block.className = `block ${blockData.type}`;
+    if (blockData.isSpooky) {
+        block.classList.add('spooky');
+    }
     block.dataset.type = blockData.type;
     block.dataset.orientation = blockData.orientation || 'single';
+    block.dataset.length = blockData.length || (blockData.type === 'truck' ? 2 : 1);
+    
+    // Set block size based on length
+    if (blockData.orientation === 'horizontal') {
+        block.style.width = `${100 * blockData.length}%`;
+    } else if (blockData.orientation === 'vertical') {
+        block.style.height = `${100 * blockData.length}%`;
+    }
     
     const cell = document.querySelector(
         `[data-row="${blockData.position[0]}"][data-col="${blockData.position[1]}"]`
@@ -124,7 +163,8 @@ function createBlock(blockData) {
         element: block,
         position: blockData.position,
         type: blockData.type,
-        orientation: blockData.orientation
+        orientation: blockData.orientation,
+        length: blockData.length
     });
 
     // Add drag event listeners
@@ -255,66 +295,55 @@ function canMoveTo(block, fromCell, toCell) {
     if (orientation === 'horizontal' && fromRow !== toRow) return false;
     if (orientation === 'vertical' && fromCol !== toCol) return false;
     
-    // Get block size based on type
-    let blockLength;
-    switch(block.dataset.type) {
-        case 'truck':
-            blockLength = 2;
-            break;
-        case 'horizontal':
-        case 'vertical':
-            blockLength = 3;
-            break;
-        default:
-            blockLength = 1;
-    }
+    // Get block length
+    const blockLength = parseInt(block.dataset.length);
     
     // Check boundaries
     if (orientation === 'horizontal') {
-        // Check if the move would put any part of the block out of bounds
         if (toCol < 0 || toCol + blockLength > 6) return false;
     } else if (orientation === 'vertical') {
-        // Check if the move would put any part of the block out of bounds
         if (toRow < 0 || toRow + blockLength > 6) return false;
     }
-    
-    // Check if path is clear, including the space the block will occupy
-    const rowStep = Math.sign(toRow - fromRow);
-    const colStep = Math.sign(toCol - fromCol);
-    
-    // Check each cell in the path AND in the final position
-    let currentRow = fromRow;
-    let currentCol = fromCol;
     
     // Remove the block temporarily from its current position
     const blockElement = fromCell.removeChild(block);
     
-    // Check the path and final position
     try {
-        // Check the path to the target
-        while (currentRow !== toRow || currentCol !== toCol) {
-            currentRow += rowStep;
-            currentCol += colStep;
-            
-            const cell = document.querySelector(`[data-row="${currentRow}"][data-col="${currentCol}"]`);
-            if (!cell || cell.children.length > 0) {
-                return false;
+        // Check the path and final position
+        const positions = new Set(); // Use Set to avoid duplicate positions
+        
+        // Add all positions the block will pass through
+        let currentRow = Math.min(fromRow, toRow);
+        let currentCol = Math.min(fromCol, toCol);
+        const endRow = Math.max(fromRow, toRow);
+        const endCol = Math.max(fromCol, toCol);
+        
+        // Add all cells the block will pass through
+        while (currentRow <= endRow) {
+            while (currentCol <= endCol) {
+                // For each position, check the full length of the block
+                for (let i = 0; i < blockLength; i++) {
+                    const pos = {
+                        row: orientation === 'vertical' ? currentRow + i : currentRow,
+                        col: orientation === 'horizontal' ? currentCol + i : currentCol
+                    };
+                    positions.add(`${pos.row},${pos.col}`);
+                }
+                currentCol++;
             }
+            currentRow++;
+            currentCol = Math.min(fromCol, toCol);
         }
         
-        // Check all cells the block will occupy in its final position
-        for (let i = 0; i < blockLength; i++) {
-            let checkRow = toRow;
-            let checkCol = toCol;
+        // Check all positions for collisions
+        for (const posKey of positions) {
+            const [row, col] = posKey.split(',').map(Number);
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
             
-            if (orientation === 'horizontal') {
-                checkCol += i;
-            } else if (orientation === 'vertical') {
-                checkRow += i;
-            }
+            if (!cell) return false;
             
-            const cell = document.querySelector(`[data-row="${checkRow}"][data-col="${checkCol}"]`);
-            if (!cell || cell.children.length > 0) {
+            // Check if cell is occupied by another block
+            if (cell.children.length > 0 && cell.children[0] !== blockElement) {
                 return false;
             }
         }
@@ -342,8 +371,17 @@ function checkWin() {
     const level = levels[currentLevel];
     const truckBlock = document.querySelector('.block.truck');
     const truckCell = truckBlock.parentElement;
+    const truckCol = parseInt(truckCell.dataset.col);
     
-    if (parseInt(truckCell.dataset.col) === level.exit[1] - 1) {
+    // Check if there are any blocks in the path to exit
+    for (let col = truckCol + 2; col <= level.exit[1]; col++) {
+        const cell = document.querySelector(`[data-row="${level.exit[0]}"][data-col="${col}"]`);
+        if (cell && cell.children.length > 0) {
+            return; // Path is blocked
+        }
+    }
+    
+    if (truckCol === level.exit[1] - 1) {
         // Animate truck sliding out
         truckBlock.style.transition = 'transform 1s ease-in-out';
         truckBlock.style.transform = 'translateX(100%)';
@@ -370,14 +408,37 @@ function showWinMessage() {
 
 // Go to next level
 function nextLevel() {
-    if (currentLevel < Object.keys(levels).length) {
+    if (currentLevel === 3) {
+        // Reveal secret level
+        currentLevel = 'secret';
+        document.getElementById('win-message').style.display = 'none';
+        
+        // Add spooky reveal animation
+        const flash = document.createElement('div');
+        flash.className = 'flash';
+        document.body.appendChild(flash);
+        
+        setTimeout(() => {
+            document.body.removeChild(flash);
+            setupLevel(currentLevel);
+            // Show spooky level message
+            const message = document.createElement('div');
+            message.className = 'spooky-message';
+            message.textContent = "You've unlocked the SPOOKY LEVEL!";
+            document.body.appendChild(message);
+            setTimeout(() => {
+                message.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(message), 1000);
+            }, 2000);
+        }, 1000);
+    } else if (currentLevel === 'secret') {
+        // Game completed
+        window.location.href = 'index.html';
+    } else if (currentLevel < 3) {
         currentLevel++;
         document.getElementById('win-message').style.display = 'none';
         updateLevelButtons();
         setupLevel(currentLevel);
-    } else {
-        // Game completed
-        window.location.href = 'index.html';
     }
 }
 
