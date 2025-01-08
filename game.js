@@ -145,7 +145,7 @@ function updateTimer() {
 function getRandomCelebrationImage() {
     const imageNumber = Math.floor(Math.random() * 5) + 1;
     const extension = imageNumber <= 2 ? 'gif' : 'png';
-    return `/images/celebration${imageNumber}.${extension}`;
+    return `images/celebration${imageNumber}.${extension}`;
 }
 
 function endGame() {
@@ -157,7 +157,15 @@ function endGame() {
     document.getElementById('score').textContent = score;
     
     // Update the celebration image
-    document.getElementById('thumbs-up-gif').src = getRandomCelebrationImage();
+    const celebrationImg = document.getElementById('thumbs-up-gif');
+    celebrationImg.src = getRandomCelebrationImage();
+    
+    // Add error handling for image loading
+    celebrationImg.onerror = function() {
+        console.error('Failed to load celebration image:', celebrationImg.src);
+        // Fallback to first image if loading fails
+        celebrationImg.src = 'images/celebration1.gif';
+    };
     
     let encouragement = "";
     if (score === 10) {
