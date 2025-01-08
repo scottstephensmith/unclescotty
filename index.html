@@ -4,38 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uncle Scotty and Aunt Michelle's Great Game Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(to bottom, #0a192f 0%, #1a2a6c 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 200px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 240px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 280px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 320px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 360px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 400px 120px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 440px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 480px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 520px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 560px 40px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            animation: twinkle 4s infinite;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 15px 15px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 45px 45px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 75px 75px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 105px 105px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 135px 135px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 165px 165px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 195px 195px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 225px 225px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 255px 255px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 285px 285px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            animation: twinkle 6s infinite 2s;
         }
 
         .container {
             background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
             max-width: 800px;
             width: 90%;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 2.8em;
             margin-bottom: 30px;
             color: #1a2a6c;
             line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h4 {
+            font-family: 'Exo 2', sans-serif;
+            color: #444;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         .games-grid {
@@ -54,21 +122,28 @@
             cursor: pointer;
             text-decoration: none;
             color: inherit;
+            border: 1px solid rgba(26, 42, 108, 0.1);
         }
 
         .game-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(26, 42, 108, 0.2);
         }
 
         .game-card h2 {
+            font-family: 'Orbitron', sans-serif;
             color: #1a2a6c;
             margin-bottom: 10px;
+            font-size: 1.4em;
+            letter-spacing: 1px;
         }
 
         .game-card p {
             color: #666;
             font-size: 0.9em;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 300;
         }
 
         .coming-soon {
@@ -91,7 +166,6 @@
     <div class="container">
         <h1>Uncle Scotty's &amp; Aunt Michelle's Great Game Website</h1>
         <h4>Welcome to our game website! Here you can find a variety of games to play with your Mom &amp; Dad.</h4>
-        
         
         <div class="games-grid">
             <a href="math-game.html" class="game-card">
