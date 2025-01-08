@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huck & Gus Math Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>The Huck & Gus Math Game</h1>
+        
+        <div id="game-start" class="game-section">
+            <button id="start-button">START</button>
+        </div>
+
+        <div id="game-play" class="game-section hidden">
+            <div id="progress">Question <span id="current-question">1</span>/10</div>
+            <div id="problem"></div>
+            <div id="choices"></div>
+            <div id="timer">Time: <span id="time">30</span>s</div>
+        </div>
+
+        <div id="game-end" class="game-section hidden">
+            <h2>Game Over!</h2>
+            <p>You got <span id="score">0</span> out of 10 correct!</p>
+            <button id="play-again">Play Again</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html> 
